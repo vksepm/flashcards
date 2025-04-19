@@ -62,6 +62,14 @@ When using shuffle mode, you can enter a specific seed number to ensure the same
 3. Cards will always shuffle in the same order when using the same seed
 4. Share seed numbers with friends or colleagues for synchronized study sessions
 
+## 📚 Technical Documentation
+
+For detailed technical diagrams of the application architecture, please see the [diagrams.md](diagrams.md) file, which includes:
+
+- Component Diagram: Visual representation of the UI component structure
+- Event Handling Diagram: Sequence diagram showing user interactions
+- Class Diagram: Object-oriented representation of the application structure
+
 ## 🛠️ Technologies Used
 
 - HTML5
