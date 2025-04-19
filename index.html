@@ -121,21 +121,56 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        
-        /* Simplified toggle styles */
+          /* Simplified toggle styles */
         #shuffle-toggle:checked + div,
-        #fullscreen-toggle:checked + div {
+        #fullscreen-toggle:checked + div,
+        #dark-theme-toggle:checked + div {
             background-color: #555555;
         }
         
         #shuffle-toggle:checked ~ .dot,
-        #fullscreen-toggle:checked ~ .dot {
+        #fullscreen-toggle:checked ~ .dot,
+        #dark-theme-toggle:checked ~ .dot {
             transform: translateX(100%);
             background-color: white;
         }
         
         .dot {
             transition: transform 0.2s ease;
+        }
+
+        /* Dark theme styles */
+        body.dark-theme {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme #flashcard-container {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+
+        body.dark-theme .flashcard-front {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .flashcard-back {
+            background-color: #252525;
+            color: #e0e0e0;
+            border-left: 2px solid #444;
+        }
+
+        body.dark-theme .bg-gray-200 {
+            background-color: #444;
+        }
+
+        body.dark-theme .text-gray-500 {
+            color: #aaa;
+        }
+
+        body.dark-theme pre {
+            background-color: #333;
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -166,6 +201,14 @@
                     <span class="text-xs text-gray-500 mr-1"><i class="fas fa-random"></i> Shuffle</span>
                     <div class="relative">
                         <input type="checkbox" id="shuffle-toggle" class="sr-only">
+                        <div class="w-8 h-4 bg-gray-200 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
+                    </div>
+                </label>
+                <label class="inline-flex items-center cursor-pointer mr-3">
+                    <span class="text-xs text-gray-500 mr-1"><i class="fas fa-moon"></i> Dark</span>
+                    <div class="relative">
+                        <input type="checkbox" id="dark-theme-toggle" class="sr-only">
                         <div class="w-8 h-4 bg-gray-200 rounded-full shadow-inner"></div>
                         <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
                     </div>

@@ -268,8 +268,7 @@ Answer: Jupiter is the largest planet.</pre>
 
     /**
      * Cache DOM elements for better performance
-     */
-    function cacheElements() {
+     */    function cacheElements() {
         elements = {
             flashcardElement: document.getElementById('flashcard'),
             questionContent: document.getElementById('question-content'),
@@ -279,6 +278,7 @@ Answer: Jupiter is the largest planet.</pre>
             nextButton: document.getElementById('next-btn'),
             shuffleToggle: document.getElementById('shuffle-toggle'),
             fullscreenToggle: document.getElementById('fullscreen-toggle'),
+            darkThemeToggle: document.getElementById('dark-theme-toggle'),
             progressBar: document.getElementById('progress-bar'),
             cardCounter: document.getElementById('card-counter')
         };
@@ -321,8 +321,7 @@ Answer: Jupiter is the largest planet.</pre>
         document.addEventListener('msfullscreenchange', function() {
             elements.fullscreenToggle.checked = !!document.msFullscreenElement;
         });
-        
-        // Add event listener for shuffle toggle
+          // Add event listener for shuffle toggle
         elements.shuffleToggle.addEventListener('change', function() {
             if (this.checked) {
                 shuffleFlashcards();
@@ -333,6 +332,18 @@ Answer: Jupiter is the largest planet.</pre>
                 updateCard();
             }
         });
+        
+        // Add event listener for dark theme toggle
+        elements.darkThemeToggle.addEventListener('change', function() {
+            document.body.classList.toggle('dark-theme', this.checked);
+            // Save user preference in localStorage
+            localStorage.setItem('darkThemeEnabled', this.checked);
+        });
+        
+        // Check for saved theme preference
+        const darkThemeEnabled = localStorage.getItem('darkThemeEnabled') === 'true';
+        elements.darkThemeToggle.checked = darkThemeEnabled;
+        document.body.classList.toggle('dark-theme', darkThemeEnabled);
         
         // Keyboard navigation
         document.addEventListener('keydown', handleKeyboardNavigation);

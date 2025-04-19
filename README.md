@@ -16,6 +16,7 @@ A sleek, interactive web-based flashcard application built with modern web techn
 - ⌨️ **Keyboard Shortcuts** - Navigation with arrow keys and space bar
 - 👆 **Swipe Support** - Swipe navigation on touch devices
 - 🖥️ **Fullscreen Mode** - Distraction-free studying
+- 🌙 **Dark Theme** - Toggle between light and dark modes for comfortable studying in any environment
 
 ## 🚀 Getting Started
 
