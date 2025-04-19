@@ -21,7 +21,7 @@ const FlashcardApp = (function() {    // Private variables
         shuffleToggle: null,
         shuffleSeed: null,
         seedContainer: null,
-        fullscreenToggle: null,
+        fullscreenBtn: null,
         progressBar: null,
         cardCounter: null
     };
@@ -278,12 +278,12 @@ Answer: Jupiter is the largest planet.</pre>
             progressElement: document.getElementById('progress'),
             prevButton: document.getElementById('prev-btn'),
             nextButton: document.getElementById('next-btn'),            shuffleToggle: document.getElementById('shuffle-toggle'),
-            fullscreenToggle: document.getElementById('fullscreen-toggle'),
             darkThemeToggle: document.getElementById('dark-theme-toggle'),
             progressBar: document.getElementById('progress-bar'),
             cardCounter: document.getElementById('card-counter'),
             shuffleSeed: document.getElementById('shuffle-seed'),
-            seedContainer: document.getElementById('seed-container')
+            seedContainer: document.getElementById('seed-container'),
+            fullscreenBtn: document.getElementById('fullscreen-btn')
         };
     }
 
@@ -308,22 +308,17 @@ Answer: Jupiter is the largest planet.</pre>
             if (currentCardIndex < flashcards.length - 1) {
                 currentCardIndex++;
                 updateCard();
-            }
-        });
+            }        });
         
-        // Add event listener for fullscreen toggle
-        elements.fullscreenToggle.addEventListener('change', toggleFullscreen);
+        // Add event listener for fullscreen button
+        elements.fullscreenBtn.addEventListener('click', toggleFullscreen);
         
-        // Listen for fullscreen change events to keep toggle in sync
-        document.addEventListener('fullscreenchange', function() {
-            elements.fullscreenToggle.checked = !!document.fullscreenElement;
-        });
-        document.addEventListener('webkitfullscreenchange', function() {
-            elements.fullscreenToggle.checked = !!document.webkitFullscreenElement;
-        });
-        document.addEventListener('msfullscreenchange', function() {
-            elements.fullscreenToggle.checked = !!document.msFullscreenElement;
-        });        // Add event listener for shuffle toggle
+        // Update fullscreen button icon based on state
+        document.addEventListener('fullscreenchange', updateFullscreenButtonIcon);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenButtonIcon);
+        document.addEventListener('msfullscreenchange', updateFullscreenButtonIcon);
+        
+        // Add event listener for shuffle toggle
         elements.shuffleToggle.addEventListener('change', function() {
             // Show/hide seed input based on shuffle toggle state
             elements.seedContainer.classList.toggle('hidden', !this.checked);
@@ -441,9 +436,7 @@ Answer: Jupiter is the largest planet.</pre>
                 updateCard();
             }
         }
-    }
-
-    /**
+    }    /**
      * Toggle fullscreen mode
      */
     function toggleFullscreen() {
@@ -466,7 +459,23 @@ Answer: Jupiter is the largest planet.</pre>
                 document.msExitFullscreen();
             }
         }
-    }    /**
+    }
+    
+    /**
+     * Update the fullscreen button icon based on current fullscreen state
+     */
+    function updateFullscreenButtonIcon() {
+        const isFullscreen = !!document.fullscreenElement || 
+                            !!document.webkitFullscreenElement || 
+                            !!document.msFullscreenElement;
+        
+        // Update icon and text based on state
+        if (isFullscreen) {
+            elements.fullscreenBtn.innerHTML = '<i class="fas fa-compress mr-1"></i> Exit Fullscreen';
+        } else {
+            elements.fullscreenBtn.innerHTML = '<i class="fas fa-expand mr-1"></i> Fullscreen';
+        }
+    }/**
      * Shuffle the flashcards using Fisher-Yates algorithm with optional seed
      */
     function shuffleFlashcards() {

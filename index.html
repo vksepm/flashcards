@@ -201,7 +201,14 @@
                     <div id="progress-bar" class="h-1 bg-blue-500 rounded-full" style="width: 0%"></div>
                 </div>
             </div>            <div class="flex items-center">
-                <div class="text-sm text-gray-500 mr-3" id="card-counter">0/0</div>                <label class="inline-flex items-center cursor-pointer mr-3">
+                <div class="text-sm text-gray-500 mr-3" id="card-counter">0/0</div>
+                <button id="prev-btn" class="inline-flex items-center text-xs text-gray-500 px-2 py-1 rounded hover:bg-gray-200 transition mr-1">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="next-btn" class="inline-flex items-center text-xs text-gray-500 px-2 py-1 rounded hover:bg-gray-200 transition mr-3">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <label class="inline-flex items-center cursor-pointer mr-3">
                     <span class="text-xs text-gray-500 mr-1"><i class="fas fa-random"></i> Shuffle</span>
                     <div class="relative">
                         <input type="checkbox" id="shuffle-toggle" class="sr-only">
@@ -213,8 +220,7 @@
                             class="w-14 text-xs border border-gray-300 rounded px-1 py-0.5 text-center"
                             title="Enter a seed number for consistent shuffling">
                     </div>
-                </label>
-                <label class="inline-flex items-center cursor-pointer mr-3">
+                </label>                <label class="inline-flex items-center cursor-pointer mr-3">
                     <span class="text-xs text-gray-500 mr-1"><i class="fas fa-moon"></i> Dark</span>
                     <div class="relative">
                         <input type="checkbox" id="dark-theme-toggle" class="sr-only">
@@ -222,14 +228,9 @@
                         <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
                     </div>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <span class="text-xs text-gray-500 mr-1"><i class="fas fa-expand"></i> Fullscreen</span>
-                    <div class="relative">
-                        <input type="checkbox" id="fullscreen-toggle" class="sr-only">
-                        <div class="w-8 h-4 bg-gray-200 rounded-full shadow-inner"></div>
-                        <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
-                    </div>
-                </label>
+                <button id="fullscreen-btn" class="inline-flex items-center text-xs text-gray-500 px-2 py-1 rounded hover:bg-gray-200 transition">
+                    <i class="fas fa-expand mr-1"></i> Fullscreen
+                </button>
             </div>
         </div>
         
