@@ -137,9 +137,7 @@
         
         .dot {
             transition: transform 0.2s ease;
-        }
-
-        /* Dark theme styles */
+        }        /* Dark theme styles */
         body.dark-theme {
             background-color: #1a1a1a;
             color: #e0e0e0;
@@ -150,15 +148,16 @@
             border-color: #444;
         }
 
+        /* Keeping flashcards in light colors even in dark theme */
         body.dark-theme .flashcard-front {
-            background-color: #2d2d2d;
-            color: #e0e0e0;
+            background-color: #ffffff; /* Keep the light background */
+            color: #333333; /* Keep the dark text */
         }
 
         body.dark-theme .flashcard-back {
-            background-color: #252525;
-            color: #e0e0e0;
-            border-left: 2px solid #444;
+            background-color: #f7f7f7; /* Keep the light background */
+            color: #333333; /* Keep the dark text */
+            border-left: 2px solid #d0d0d0; /* Keep the light border */
         }
 
         body.dark-theme .bg-gray-200 {
