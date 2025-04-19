@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Custom styles for the flip animation */        .flashcard {
             position: relative;
@@ -100,8 +102,7 @@
         }
         button:active {
             transform: scale(0.95);
-        }
-        /* Hide scrollbar for card content but allow scrolling */
+        }        /* Hide scrollbar for card content but allow scrolling */
         .flashcard-front::-webkit-scrollbar,
         .flashcard-back::-webkit-scrollbar {
             display: none; /* WebKit */
@@ -109,6 +110,21 @@
         .flashcard-front, .flashcard-back {
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
+        }
+          /* Shuffle toggle styles */
+        #shuffle-toggle:checked + div,
+        #fullscreen-toggle:checked + div {
+            background-color: #3b82f6; /* Blue background when checked */
+        }
+        
+        #shuffle-toggle:checked ~ .dot,
+        #fullscreen-toggle:checked ~ .dot {
+            transform: translateX(100%);
+            background-color: white;
+        }
+        
+        .dot {
+            transition: all 0.3s ease-in-out;
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,179 +143,36 @@
                 </div>
             </div>
         </div>
+          <!-- Progress indicator and controls -->
+        <div class="w-full mt-4 flex items-center justify-between">
+            <div class="text-sm text-gray-500" id="progress">Card 0 of 0</div>
+            <div class="flex-1 mx-3">
+                <div class="h-1 bg-gray-200 rounded-full">
+                    <div id="progress-bar" class="h-1 bg-blue-500 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>            <div class="flex items-center">
+                <div class="text-sm text-gray-500 mr-3" id="card-counter">0/0</div>                <label class="inline-flex items-center cursor-pointer mr-3">
+                    <span class="text-xs text-gray-500 mr-1"><i class="fas fa-random"></i> Shuffle</span>
+                    <div class="relative">
+                        <input type="checkbox" id="shuffle-toggle" class="sr-only">
+                        <div class="w-8 h-4 bg-gray-200 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
+                    </div>
+                </label>
+                <label class="inline-flex items-center cursor-pointer">
+                    <span class="text-xs text-gray-500 mr-1"><i class="fas fa-expand"></i> Fullscreen</span>
+                    <div class="relative">
+                        <input type="checkbox" id="fullscreen-toggle" class="sr-only">
+                        <div class="w-8 h-4 bg-gray-200 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
+                    </div>
+                </label>
+            </div>
+        </div>
         
-        <!-- Hidden elements for functionality but not visible -->
-        <div id="progress" class="hidden">Card 0 of 0</div>
         <div class="hidden">
             <button id="prev-btn">Prev</button>
             <button id="next-btn">Next</button>
         </div>
-    </div>    <!-- Removed inline markdown data in favor of loading from external file -->
-    
-    <script>
-        // Fetch and process the flashcard content from the content.md file
-        document.addEventListener('DOMContentLoaded', async function() {
-            try {
-                // Fetch the content.md file
-                const response = await fetch('content.md');
-                if (!response.ok) {
-                    throw new Error(`Failed to load content.md: ${response.status} ${response.statusText}`);
-                }
-                
-                const markdownContent = await response.text();
-                
-                // Process the markdown content into flashcards
-                const flashcards = processMarkdownToFlashcards(markdownContent);
-                
-                // Initialize the flashcard app
-                initFlashcardApp(flashcards);
-            } catch (error) {
-                console.error('Error loading flashcards:', error);
-                document.getElementById('question-content').innerHTML = `
-                    <div class="text-red-500 font-bold">Error loading flashcards</div>
-                    <p>${error.message}</p>
-                    <p>Please check that content.md file exists and is accessible.</p>
-                `;
-            }
-        });
-        
-        // Function to process markdown content into flashcards
-        function processMarkdownToFlashcards(markdownContent) {
-            const flashcards = [];
-            
-            // Split by "Question:" to separate individual cards
-            const sections = markdownContent.split(/Question:\s+/);
-            
-            // Skip the first empty section if it exists
-            for (let i = 1; i < sections.length; i++) {
-                const section = sections[i].trim();
-                
-                // Extract the question number
-                const questionNumberMatch = section.match(/^(\d+)/);
-                const questionNumber = questionNumberMatch ? questionNumberMatch[1] : i;
-                
-                // Split by "Answer:" to separate question and answer
-                const parts = section.split(/Answer:\s+/);
-                
-                if (parts.length >= 2) {
-                    const questionText = parts[0].trim();
-                    const answerText = parts[1].trim();
-                    
-                    flashcards.push({
-                        id: questionNumber,
-                        question: `Question: ${questionText}`,
-                        answer: answerText
-                    });
-                }
-            }
-            
-            return flashcards;
-        }
-        
-        // Function to initialize the flashcard app with the parsed flashcards
-        function initFlashcardApp(flashcards) {
-            if (flashcards.length === 0) {
-                document.getElementById('question-content').innerHTML = 'No flashcards found in content.md';
-                return;
-            }
-            
-            const flashcardElement = document.getElementById('flashcard');
-            const questionContent = document.getElementById('question-content');
-            const answerContent = document.getElementById('answer-content');
-            const progressElement = document.getElementById('progress');
-            const prevButton = document.getElementById('prev-btn');
-            const nextButton = document.getElementById('next-btn');
-            
-            let currentCardIndex = 0;
-            
-            // Function to update the displayed card
-            function updateCard() {
-                const card = flashcards[currentCardIndex];
-                
-                // Use marked.js to render markdown content
-                questionContent.innerHTML = marked.parse(card.question);
-                answerContent.innerHTML = marked.parse(card.answer);
-                
-                // Update progress text
-                progressElement.textContent = `Card ${currentCardIndex + 1} of ${flashcards.length}`;
-                
-                // Update button states
-                prevButton.disabled = currentCardIndex === 0;
-                nextButton.disabled = currentCardIndex === flashcards.length - 1;
-                
-                // Ensure card is showing front side
-                flashcardElement.classList.remove('flipped');
-            }
-            
-            // Initialize with the first card
-            updateCard();
-            
-            // Event handler for flipping the card
-            flashcardElement.addEventListener('click', function() {
-                flashcardElement.classList.toggle('flipped');
-            });
-            
-            // Event handlers for navigation buttons
-            prevButton.addEventListener('click', function() {
-                if (currentCardIndex > 0) {
-                    currentCardIndex--;
-                    updateCard();
-                }
-            });
-            
-            nextButton.addEventListener('click', function() {
-                if (currentCardIndex < flashcards.length - 1) {
-                    currentCardIndex++;
-                    updateCard();
-                }
-            });            // Keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                // Spacebar to flip
-                if (e.code === 'Space') {
-                    e.preventDefault();
-                    flashcardElement.classList.toggle('flipped');
-                }
-                
-                // Left arrow for previous card
-                else if (e.code === 'ArrowLeft' && currentCardIndex > 0) {
-                    currentCardIndex--;
-                    updateCard();
-                }
-                
-                // Right arrow for next card
-                else if (e.code === 'ArrowRight' && currentCardIndex < flashcards.length - 1) {
-                    currentCardIndex++;
-                    updateCard();
-                }
-                            });
-            
-            // Add touch swipe support for mobile
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            document.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-            });
-            
-            document.addEventListener('touchend', function(e) {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            });
-            
-            function handleSwipe() {
-                const swipeThreshold = 50;
-                
-                // Swipe right to left (next)
-                if (touchStartX - touchEndX > swipeThreshold && currentCardIndex < flashcards.length - 1) {
-                    currentCardIndex++;
-                    updateCard();
-                }
-                
-                // Swipe left to right (previous)
-                else if (touchEndX - touchStartX > swipeThreshold && currentCardIndex > 0) {
-                    currentCardIndex--;
-                    updateCard();
-                }
-            }
-        }
-    </script>
+    </div>    <!-- External JavaScript file -->
+    <script src="flashcard-app.js"></script>
