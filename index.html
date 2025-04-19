@@ -42,13 +42,15 @@
             border-radius: 0.25rem;
             overflow-y: auto;
         }
-        
-        /* Clean content containers */
+          /* Clean content containers with improved scrolling */
         .flashcard-front > div, .flashcard-back > div {
             width: 100%;
             max-height: 70vh;
             overflow-y: auto !important;
             padding-bottom: 1.5rem;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+            scrollbar-width: thin; /* For Firefox */
+            position: relative; /* Needed for proper scrolling on some mobile browsers */
         }
         
         /* Simplified markdown styling */

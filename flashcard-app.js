@@ -339,13 +339,16 @@ Answer: Jupiter is the largest planet.</pre>
         
         // Touch swipe support
         setupTouchSwipeSupport();
-    }
-
-    /**
+    }    /**
      * Handle keyboard navigation
      * @param {KeyboardEvent} e - The keyboard event
      */
     function handleKeyboardNavigation(e) {
+        // Get the active content element based on card state
+        const activeContent = elements.flashcardElement.classList.contains('flipped') 
+            ? elements.answerContent 
+            : elements.questionContent;
+        
         // Spacebar to flip
         if (e.code === 'Space') {
             e.preventDefault();
@@ -362,6 +365,24 @@ Answer: Jupiter is the largest planet.</pre>
         else if (e.code === 'ArrowRight' && currentCardIndex < flashcards.length - 1) {
             currentCardIndex++;
             updateCard();
+        }
+        
+        // Up arrow to scroll content up
+        else if (e.code === 'ArrowUp') {
+            e.preventDefault(); // Prevent default page scrolling
+            activeContent.scrollBy({
+                top: -50,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Down arrow to scroll content down
+        else if (e.code === 'ArrowDown') {
+            e.preventDefault(); // Prevent default page scrolling
+            activeContent.scrollBy({
+                top: 50,
+                behavior: 'smooth'
+            });
         }
     }
 
