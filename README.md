@@ -16,7 +16,8 @@ A sleek, interactive web-based flashcard application built with modern web techn
 - 📝 **Direct Input** - Paste content directly into the app
 - ⌨️ **Keyboard Shortcuts** - Navigation with arrow keys and space bar
 - 👆 **Swipe Support** - Swipe navigation on touch devices
-- 🖥️ **Fullscreen Mode** - Distraction-free studying
+- 🖥️ **Fullscreen Mode** - Distraction-free studying with a single click
+- 🔢 **On-screen Navigation** - Convenient navigation buttons for browsing cards
 - 🌙 **Dark Theme** - Toggle between light and dark modes for comfortable studying in any environment
 
 ## 🚀 Getting Started
