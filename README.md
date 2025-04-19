@@ -9,6 +9,7 @@ A sleek, interactive web-based flashcard application built with modern web techn
 - 🔄 **Interactive Card Flipping** - Click cards to flip between questions and answers
 - 📱 **Responsive Design** - Works on desktop and mobile devices
 - 🔀 **Shuffle Mode** - Randomize card order for better learning
+- 🎲 **Seed-based Shuffling** - Use a specific seed number for consistent shuffle patterns
 - 📏 **Progress Tracking** - See your progress through the deck
 - 📋 **Markdown Support** - Format your flashcards with markdown
 - 📂 **File Upload** - Load flashcards from markdown files
@@ -50,6 +51,15 @@ Answer: Jupiter is the largest planet in our solar system.
 - **Tap**: Flip the current card
 - **Swipe left**: Next card
 - **Swipe right**: Previous card
+
+## 🎲 Seed-based Shuffling
+
+When using shuffle mode, you can enter a specific seed number to ensure the same shuffling pattern:
+
+1. Enable shuffle mode by toggling the shuffle switch
+2. Enter a number in the seed input field that appears
+3. Cards will always shuffle in the same order when using the same seed
+4. Share seed numbers with friends or colleagues for synchronized study sessions
 
 ## 🛠️ Technologies Used
 

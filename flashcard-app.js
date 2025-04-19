@@ -4,11 +4,11 @@
  */
 
 // Main module for the flashcard application
-const FlashcardApp = (function() {
-    // Private variables
+const FlashcardApp = (function() {    // Private variables
     let flashcards = [];
     let originalFlashcards = [];
     let currentCardIndex = 0;
+    let currentSeed = null;
     
     // DOM Elements - will be initialized when app starts
     let elements = {
@@ -19,6 +19,8 @@ const FlashcardApp = (function() {
         prevButton: null,
         nextButton: null,
         shuffleToggle: null,
+        shuffleSeed: null,
+        seedContainer: null,
         fullscreenToggle: null,
         progressBar: null,
         cardCounter: null
@@ -275,12 +277,13 @@ Answer: Jupiter is the largest planet.</pre>
             answerContent: document.getElementById('answer-content'),
             progressElement: document.getElementById('progress'),
             prevButton: document.getElementById('prev-btn'),
-            nextButton: document.getElementById('next-btn'),
-            shuffleToggle: document.getElementById('shuffle-toggle'),
+            nextButton: document.getElementById('next-btn'),            shuffleToggle: document.getElementById('shuffle-toggle'),
             fullscreenToggle: document.getElementById('fullscreen-toggle'),
             darkThemeToggle: document.getElementById('dark-theme-toggle'),
             progressBar: document.getElementById('progress-bar'),
-            cardCounter: document.getElementById('card-counter')
+            cardCounter: document.getElementById('card-counter'),
+            shuffleSeed: document.getElementById('shuffle-seed'),
+            seedContainer: document.getElementById('seed-container')
         };
     }
 
@@ -320,9 +323,11 @@ Answer: Jupiter is the largest planet.</pre>
         });
         document.addEventListener('msfullscreenchange', function() {
             elements.fullscreenToggle.checked = !!document.msFullscreenElement;
-        });
-          // Add event listener for shuffle toggle
+        });        // Add event listener for shuffle toggle
         elements.shuffleToggle.addEventListener('change', function() {
+            // Show/hide seed input based on shuffle toggle state
+            elements.seedContainer.classList.toggle('hidden', !this.checked);
+            
             if (this.checked) {
                 shuffleFlashcards();
             } else {
@@ -330,6 +335,14 @@ Answer: Jupiter is the largest planet.</pre>
                 flashcards = [...originalFlashcards];
                 currentCardIndex = 0;
                 updateCard();
+            }
+        });
+        
+        // Add event listener for seed input
+        elements.shuffleSeed.addEventListener('input', function() {
+            if (elements.shuffleToggle.checked && this.value.trim() !== '') {
+                // Re-shuffle with the new seed
+                shuffleFlashcards();
             }
         });
         
@@ -453,19 +466,43 @@ Answer: Jupiter is the largest planet.</pre>
                 document.msExitFullscreen();
             }
         }
-    }
-
-    /**
-     * Shuffle the flashcards using Fisher-Yates algorithm
+    }    /**
+     * Shuffle the flashcards using Fisher-Yates algorithm with optional seed
      */
     function shuffleFlashcards() {
-        // Fisher-Yates shuffle algorithm
-        for (let i = flashcards.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+        // Get seed value from input or use random if empty
+        const seedValue = elements.shuffleSeed.value.trim();
+        currentSeed = seedValue !== '' ? parseInt(seedValue) : Date.now();
+        
+        // Set the seed input value for user reference
+        elements.shuffleSeed.value = currentSeed;
+        
+        // Create a seeded random number generator
+        const seededRandom = createSeededRandom(currentSeed);
+        
+        // Fisher-Yates shuffle algorithm with seeded random
+        const shuffled = [...originalFlashcards];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(seededRandom() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
+        
+        flashcards = shuffled;
         currentCardIndex = 0;
         updateCard();
+    }
+    
+    /**
+     * Create a seeded random number generator
+     * @param {number} seed - The seed for the random number generator
+     * @returns {function} A function that returns a random number between 0 and 1
+     */
+    function createSeededRandom(seed) {
+        return function() {
+            // Simple seeded random number generator using a linear congruential generator
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        };
     }
 
     /**

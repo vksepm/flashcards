@@ -162,14 +162,19 @@
 
         body.dark-theme .bg-gray-200 {
             background-color: #444;
-        }
-
-        body.dark-theme .text-gray-500 {
+        }        body.dark-theme .text-gray-500 {
             color: #aaa;
         }
 
         body.dark-theme pre {
             background-color: #333;
+        }
+        
+        /* Dark theme for seed input field */
+        body.dark-theme #shuffle-seed {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #444;
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,6 +207,11 @@
                         <input type="checkbox" id="shuffle-toggle" class="sr-only">
                         <div class="w-8 h-4 bg-gray-200 rounded-full shadow-inner"></div>
                         <div class="dot absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-0 transition"></div>
+                    </div>
+                    <div id="seed-container" class="hidden ml-2">
+                        <input type="number" id="shuffle-seed" placeholder="Seed" min="0" 
+                            class="w-14 text-xs border border-gray-300 rounded px-1 py-0.5 text-center"
+                            title="Enter a seed number for consistent shuffling">
                     </div>
                 </label>
                 <label class="inline-flex items-center cursor-pointer mr-3">
